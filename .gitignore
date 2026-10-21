@@ -1,0 +1,21 @@
+# dependencies
+node_modules/
+
+# build output
+.next/
+dist/
+
+# env
+.env
+.env.*
+!.env.example
+
+# uploaded files (express)
+express/uploads/
+
+# logs / OS / editor
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

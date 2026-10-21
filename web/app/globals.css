@@ -1,0 +1,32 @@
+:root { --bg:#f6f5f1; --fg:#1d1d1f; --muted:#6b6b70; --card:#fff; --line:#e4e2dc; --accent:#2f5d50; --danger:#b3261e; --star:#d98e04; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#161716; --fg:#ececec; --muted:#9a9a9f; --card:#212322; --line:#33363a; --accent:#7fc4ae; --danger:#f2867f; --star:#f0b429; }
+}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui,sans-serif; }
+main { max-width:720px; margin:0 auto; padding:16px 16px 64px; display:grid; gap:12px; }
+h1 { margin:8px 0; }
+h2 { margin:0 0 10px; font-size:1rem; }
+.box { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; }
+.muted { color:var(--muted); font-size:.9rem; }
+.error { color:var(--danger); }
+.stars { color:var(--star); }
+.row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.btn { padding:8px 14px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:var(--bg); font:inherit; cursor:pointer; }
+.btn.ghost { background:transparent; color:var(--accent); }
+.btn.danger { background:transparent; border-color:var(--danger); color:var(--danger); }
+.btn:disabled { opacity:.5; cursor:wait; }
+input, select { font:inherit; padding:8px 10px; border-radius:8px; border:1px solid var(--line); background:var(--bg); color:var(--fg); min-width:0; }
+.bookform { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.bookform .fields { flex:1; display:grid; gap:8px; min-width:200px; }
+.pick { width:64px; height:92px; border:2px dashed var(--line); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--muted); font-size:.8rem; text-align:center; overflow:hidden; }
+.pick img, .item img { width:100%; height:100%; object-fit:cover; }
+.item { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.item img, .nocover { width:48px; height:70px; border-radius:6px; flex:none; }
+.item img { width:48px; }
+.nocover { background:var(--line); display:flex; align-items:center; justify-content:center; }
+.info { flex:1; display:grid; min-width:140px; }
+.reviews { margin-top:12px; padding-top:10px; border-top:1px solid var(--line); }
+.reviews p { margin:4px 0; }
+.reviewform { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+.reviewform input { flex:1; min-width:140px; }
