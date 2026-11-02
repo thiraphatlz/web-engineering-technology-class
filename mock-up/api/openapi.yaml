@@ -1,0 +1,249 @@
+openapi: 3.0.3
+info:
+  title: Shop API
+  version: 1.0.0
+  description: CRUD หมวดหมู่ (Category) และสินค้า (Product) พร้อมอัปโหลดรูปสินค้า
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: Categories
+    description: หมวดหมู่สินค้า (ส่ง JSON)
+  - name: Products
+    description: สินค้า (ส่ง multipart/form-data เพราะมีรูป)
+
+paths:
+  /api/categories:
+    get:
+      tags: [Categories]
+      summary: รายการหมวดหมู่ทั้งหมด
+      operationId: listCategories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/CategoryWithCount' }
+    post:
+      tags: [Categories]
+      summary: เพิ่มหมวดหมู่
+      operationId: createCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CategoryInput' }
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/CategoryInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Category' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '409': { $ref: '#/components/responses/Conflict' }
+
+  /api/categories/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Categories]
+      summary: ดูหมวดหมู่ 1 รายการ พร้อมสินค้าในหมวด
+      operationId: getCategory
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CategoryDetail' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Categories]
+      summary: แก้ชื่อหมวดหมู่
+      operationId: updateCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CategoryInput' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Category' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+    delete:
+      tags: [Categories]
+      summary: ลบหมวดหมู่ (สินค้าและรูปในหมวดถูกลบด้วย)
+      operationId: deleteCategory
+      responses:
+        '204': { description: ลบสำเร็จ }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/products:
+    get:
+      tags: [Products]
+      summary: รายการสินค้าทั้งหมด (กรองตามหมวดได้)
+      operationId: listProducts
+      parameters:
+        - name: categoryId
+          in: query
+          description: แสดงเฉพาะสินค้าในหมวดนี้
+          schema: { type: integer }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ProductWithCategory' }
+    post:
+      tags: [Products]
+      summary: เพิ่มสินค้า (แนบรูปได้)
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [name, price, categoryId]
+              properties:
+                name: { type: string, example: ปากกา }
+                price: { type: number, example: 15 }
+                categoryId: { type: integer, example: 1 }
+                image:
+                  type: string
+                  format: binary
+                  description: jpg / png / webp ไม่เกิน 5MB
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Product' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  /api/products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Products]
+      summary: ดูสินค้า 1 รายการ
+      operationId: getProduct
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProductWithCategory' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Products]
+      summary: แก้ไขสินค้า (ฟิลด์ที่ไม่ส่งมา = คงค่าเดิม)
+      operationId: updateProduct
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                price: { type: number }
+                categoryId: { type: integer }
+                image:
+                  type: string
+                  format: binary
+                  description: ถ้าส่งมา รูปเดิมจะถูกแทนที่และลบทิ้ง
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Product' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Products]
+      summary: ลบสินค้า (ลบไฟล์รูปด้วย)
+      operationId: deleteProduct
+      responses:
+        '204': { description: ลบสำเร็จ }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer }
+  responses:
+    BadRequest:
+      description: ข้อมูลที่ส่งมาไม่ครบหรือไม่ถูกต้อง
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: ไม่พบข้อมูล
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Conflict:
+      description: ข้อมูลซ้ำ (เช่น ชื่อหมวดหมู่ซ้ำ)
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+  schemas:
+    Error:
+      type: object
+      properties:
+        message: { type: string, example: ไม่พบข้อมูล }
+    CategoryInput:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string, example: Food }
+    Category:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        name: { type: string, example: Food }
+    CategoryWithCount:
+      allOf:
+        - $ref: '#/components/schemas/Category'
+        - type: object
+          properties:
+            _count:
+              type: object
+              properties:
+                products: { type: integer, example: 3 }
+    CategoryDetail:
+      allOf:
+        - $ref: '#/components/schemas/Category'
+        - type: object
+          properties:
+            products:
+              type: array
+              items: { $ref: '#/components/schemas/Product' }
+    Product:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        name: { type: string, example: ปากกา }
+        price: { type: number, example: 15 }
+        imageUrl: { type: string, nullable: true, example: /files/3f2a1c.jpg }
+        createdAt: { type: string, format: date-time }
+        categoryId: { type: integer, example: 1 }
+    ProductWithCategory:
+      allOf:
+        - $ref: '#/components/schemas/Product'
+        - type: object
+          properties:
+            category: { $ref: '#/components/schemas/Category' }

@@ -1,0 +1,14 @@
+body { font-family: system-ui, sans-serif; max-width: 760px; margin: 0 auto; padding: 1rem; background: #f6f7f9; color: #1b2430; }
+nav { display: flex; gap: .8rem; padding: .4rem 0 1rem; }
+.box { background: #fff; border: 1px solid #dde3ea; border-radius: 10px; padding: .8rem 1rem; margin: .8rem 0; display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+.box h2 { flex-basis: 100%; margin: 0; font-size: 1.1rem; }
+form { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+input, select { padding: .4rem .6rem; border: 1px solid #c9d1da; border-radius: 6px; font: inherit; }
+label span { cursor: pointer; padding: .4rem .6rem; border: 1px dashed #9aa6b2; border-radius: 6px; }
+label img { border-radius: 6px; cursor: pointer; }
+.btn { padding: .4rem .9rem; border: 0; border-radius: 6px; background: #0b7285; color: #fff; font: inherit; cursor: pointer; }
+.btn:disabled { opacity: .5; }
+.btn.ghost { background: transparent; color: #0b7285; border: 1px solid #0b7285; }
+.btn.danger { background: #c92a2a; }
+.muted { color: #6b7785; }
+.error { color: #c92a2a; flex-basis: 100%; }
