@@ -287,8 +287,8 @@ footer { margin-top: 4rem; color: var(--muted); font-size: .9rem; }
   gap: .2rem;
   max-width: 1120px;
   margin: 0 auto;
-  padding: .45rem max(16px, env(safe-area-inset-right, 0px)) .45rem max(16px, env(safe-area-inset-left, 0px));
-  overflow-x: auto;
+  padding: .35rem max(16px, env(safe-area-inset-right, 0px)) .35rem max(16px, env(safe-area-inset-left, 0px));
+  flex-wrap: wrap; /* เมนูสั้นแล้ว ไม่ต้องเลื่อนแนวนอน (และต้องไม่ตัดเมนูย่อยที่เปิดลงมา) */
 }
 .sitenav b { font-family: var(--font-head); margin-right: 1rem; white-space: nowrap; }
 .sitenav a { padding: .3rem .8rem; border-radius: 8px; color: var(--muted); text-decoration: none; white-space: nowrap; font-size: .92rem; }
@@ -330,6 +330,35 @@ footer { margin-top: 4rem; color: var(--muted); font-size: .9rem; }
 .pcard em { font-style: normal; font-size: .8rem; color: var(--accent); font-weight: 600; margin-top: auto; padding-top: .3rem; }
 .pcard.start { border-color: var(--accent); background: var(--accent-soft); }
 
+/* ห้องสอบ = ส่วนหลัก (เด่นสุด) / ที่เหลือ = บทเรียนเสริม (เบา เล็ก) */
+.exam-hero { display: block; margin: 1.6rem 0 0; padding: 1.5rem 1.6rem; border-radius: 16px; background: var(--accent); color: var(--bg); text-decoration: none; box-shadow: 0 6px 24px rgba(11, 114, 133, .25); }
+.exam-hero:hover, .exam-hero:focus-visible { filter: brightness(1.08); outline: 3px solid var(--accent-soft); outline-offset: 2px; }
+.exam-hero .badge { display: inline-block; font: 700 .78rem var(--font-head); letter-spacing: .06em; padding: .1rem .7rem; border-radius: 99px; background: var(--bg); color: var(--accent); }
+.exam-hero h2 { margin: .6rem 0 .3rem; font: 700 clamp(1.5rem, 4vw, 2rem)/1.25 var(--font-head); color: inherit; }
+.exam-hero p { margin: 0; font-size: 1.02rem; opacity: .95; color: inherit; }
+.exam-hero .go { display: inline-block; margin-top: 1rem; padding: .55rem 1.3rem; border-radius: 10px; background: var(--bg); color: var(--accent); font: 700 1rem var(--font-head); }
+.more-h { margin: 2.5rem 0 .2rem; font: 600 1rem var(--font-head); color: var(--muted); }
+.more-p { margin: 0 0 .6rem; font-size: .85rem; color: var(--muted); }
+.cards.minor { grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: .5rem; margin-top: .5rem; }
+.cards.minor .pcard { padding: .55rem .8rem; background: transparent; gap: .1rem; }
+.cards.minor .pcard b { font-size: .92rem; font-weight: 500; color: var(--muted); }
+.cards.minor .pcard span { font-size: .78rem; line-height: 1.4; }
+.cards.minor .pcard em { display: none; }
+.sitenav a.exam-link { background: var(--accent); color: var(--bg); font-weight: 700; margin-right: .6rem; }
+.sitenav a.exam-link:hover { color: var(--bg); filter: brightness(1.1); }
+.sitenav a.exam-link[aria-current] { background: var(--accent); color: var(--bg); box-shadow: 0 0 0 2px var(--accent-soft); }
+.sitenav .sep { padding: 0 .4rem 0 .2rem; font-size: .78rem; color: var(--muted); white-space: nowrap; border-left: 1px solid var(--line); margin-left: .2rem; }
+.sitenav a.minor { font-size: .85rem; }
+.sitenav details.more { position: relative; }
+.sitenav details.more > summary { list-style: none; cursor: pointer; padding: .3rem .8rem; border-radius: 8px; color: var(--muted); font-size: .92rem; white-space: nowrap; }
+.sitenav details.more > summary::-webkit-details-marker { display: none; }
+.sitenav details.more > summary::after { content: ' \25BE'; }
+.sitenav details.more[open] > summary, .sitenav details.more[data-on] > summary { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.sitenav details.more > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sitenav details.more .menu { position: absolute; top: calc(100% + .3rem); left: 0; z-index: 30; min-width: 12.5rem; display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: .3rem; box-shadow: 0 8px 24px rgba(0, 0, 0, .15); }
+.exam-bar { display: none; margin: 0 0 1rem; padding: .55rem 1rem; border-radius: 10px; background: var(--accent-soft); border-left: 4px solid var(--accent); font-size: .92rem; }
+body[data-part]:not([data-part="part-exam"]):not([data-part="part-home"]) .exam-bar { display: block; }
+
 /* คำอธิบายพับได้ */
 details.why { padding: 0; }
 details.why > summary { cursor: pointer; padding: .55rem 1.1rem; font-family: var(--font-head); font-weight: 600; color: var(--accent); list-style: none; }
@@ -348,28 +377,460 @@ figure.code button.more { display: block; width: 100%; border: 0; border-top: 1p
 </style>
 </head>
 <body>
-<header class="sitenav"><div><a class="brand" href="#home">Web Class</a><a href="#quick">A ทำตามได้เลย</a><a href="#lessons">B อธิบายโปรเจกต์</a><a href="#express">C Express</a><a href="#next">D Next.js</a><a href="#cheatsheet">E Cheatsheet</a><a href="#adapt">F ใช้ HTML/CSS</a><label class="opt"><input type="checkbox" id="openAll"> เปิดคำอธิบายทั้งหมด</label></div></header>
+<header class="sitenav"><div><a class="brand" href="#home">Web Class</a><a class="exam-link" href="#exam">ห้องสอบ</a><details class="more"><summary>บทเรียนเสริม</summary><span class="menu"><a href="#quick">A ทำตามได้เลย</a><a href="#lessons">B อธิบายโปรเจกต์</a><a href="#express">C Express</a><a href="#next">D Next.js</a><a href="#cheatsheet">E Cheatsheet</a><a href="#adapt">F ใช้ HTML/CSS</a></span></details><label class="opt"><input type="checkbox" id="openAll"> ขยายคำอธิบาย</label></div></header>
 <div class="shell">
   <nav class="toc" aria-label="สารบัญ"><b>สารบัญ</b></nav>
 
   <main>
     <details class="toc-m"><summary>สารบัญ</summary></details>
+    <div class="exam-bar">กำลังเตรียมสอบ? ส่วนที่ต้องอ่านคือ <a href="#exam"><b>ห้องสอบ</b></a> ส่วนนี้เป็นบทเรียนเสริม ไม่ต้องอ่านในห้องสอบ</div>
 
     <div class="part" id="part-home">
     <header class="hero" id="home">
       <h1>สร้างเว็บ CRUD ด้วย Express และ Next.js</h1>
-      <p>เรียนจากโฟลเดอร์ว่างจนได้เว็บที่ใช้งานได้จริง ทำตามทีละข้อ โค้ดทุกชุดในหน้านี้ผมรันทดสอบแล้ว เลือกส่วนที่ต้องการ:</p>
+      <p>เตรียมสอบเขียน backend + frontend ทำ CRUD และอัปโหลดรูป โค้ดทุกชุดในหน้านี้ผมรันทดสอบแล้ว</p>
     </header>
-    <div class="cards">
-      <a class="pcard start" href="#quick"><b>A. ทำตามได้เลย</b><span>12 ข้อ วางโค้ดทีละก้อน ได้เว็บ CRUD พร้อมอัปโหลดรูปที่ใช้งานได้จริง</span><em>เริ่มที่นี่ · มือใหม่</em></a>
-      <a class="pcard" href="#adapt"><b>F. ใช้ HTML/CSS ที่โจทย์ให้มา</b><span>นำไฟล์ HTML/CSS ของอาจารย์มาใช้กับ Express / NestJS / Next.js</span><em>มีตัวอย่าง 2 หน้า · 5 วิธี</em></a>
-      <a class="pcard" href="#lessons"><b>B. อธิบายโปรเจกต์</b><span>แต่ละไฟล์ทำอะไร ทำไมเขียนแบบนี้ รวม Swagger และ Postman</span><em>อ่านเมื่ออยากรู้ว่าทำไม</em></a>
-      <a class="pcard" href="#express"><b>C. บทเรียน Express</b><span>ติดตั้ง route middleware error อัปโหลดไฟล์ JWT</span><em>11 บท</em></a>
-      <a class="pcard" href="#next"><b>D. บทเรียน Next.js</b><span>routing server/client component ดึงข้อมูล Server Actions deploy</span><em>13 บท</em></a>
-      <a class="pcard" href="#cheatsheet"><b>E. Cheatsheet</b><span>สรุปคำสั่งและโค้ดที่ใช้บ่อย เปิดไว้ข้างๆ ตอนเขียนโค้ด</span><em>อ้างอิงเร็ว</em></a>
+
+    <a class="exam-hero" href="#exam">
+      <span class="badge">อ่านอันนี้อันเดียวตอนสอบ</span>
+      <h2>ห้องสอบ: ทำตามข้อ 1 ถึง 8</h2>
+      <p>จาก ER diagram (และ HTML/CSS ถ้าโจทย์ให้มา) เป็น API + หน้าเว็บ CRUD พร้อมอัปโหลดรูป โค้ดทุกก้อนทดสอบแล้ว คัดลอกได้เลย</p>
+      <span class="go">เปิดห้องสอบ →</span>
+    </a>
+
+    <h2 class="more-h">บทเรียนเสริม</h2>
+    <p class="more-p">ไว้ฝึกและอ่านเพื่อเข้าใจ ไม่ต้องเปิดในห้องสอบ</p>
+    <div class="cards minor">
+      <a class="pcard" href="#quick"><b>A. ทำตามได้เลย</b><span>ฝึกทำเว็บร้านค้าทีละข้อ 12 ข้อ</span><em>ฝึก</em></a>
+      <a class="pcard" href="#lessons"><b>B. อธิบายโปรเจกต์</b><span>แต่ละไฟล์ทำอะไร ทำไมเขียนแบบนี้</span><em>เข้าใจ</em></a>
+      <a class="pcard" href="#adapt"><b>F. ใช้ HTML/CSS ของโจทย์</b><span>5 วิธี (ห้องสอบสรุปวิธีง่ายสุดไว้แล้ว)</span><em>วิธีอื่น</em></a>
+      <a class="pcard" href="#express"><b>C. บทเรียน Express</b><span>route, middleware, error, JWT</span><em>11 บท</em></a>
+      <a class="pcard" href="#next"><b>D. บทเรียน Next.js</b><span>routing, Server Actions, deploy</span><em>13 บท</em></a>
+      <a class="pcard" href="#cheatsheet"><b>E. Cheatsheet</b><span>คำสั่งและโค้ดที่ใช้บ่อย</span><em>อ้างอิง</em></a>
     </div>
 
     </div>
+
+    <div class="part" id="part-exam">
+    <!-- ===== ห้องสอบ: ทำตามเส้นเดียว (สร้างจาก exam-part.html แล้วใส่โค้ดที่ทดสอบแล้ว) ===== -->
+    <div class="band" id="exam" data-toc="ห้องสอบ: เริ่มที่นี่">
+      <h2>ห้องสอบ: ทำตามนี้ ข้อ 1 ถึง 8</h2>
+      <p>ใช้ตอนสอบ: โจทย์ให้ ER diagram (และอาจมี HTML/CSS) แล้วให้ทำ API + หน้าเว็บ CRUD พร้อมอัปโหลดรูป ทำตามลำดับ ไม่ต้องอ่านส่วนอื่นของหน้านี้</p>
+    </div>
+
+    <section id="xm0" data-toc="ภาพรวม 8 ข้อ">
+      <div class="note">ตัวอย่างใช้โจทย์ <b>Book 1—N Review</b> (ER จากโจทย์เก่า) โค้ดทุกก้อนผมรันทดสอบแล้วด้วย curl และเบราว์เซอร์จริง (เพิ่ม แก้ ลบ อัปโหลดรูป เพิ่มรีวิว) ใช้ Express ตัวเดียวเสิร์ฟทั้ง API และหน้าเว็บ จึงไม่มีปัญหา CORS</div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>ข้อ</th><th>ทำอะไร</th><th>ไฟล์</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>ติดตั้งโปรเจกต์</td><td>(คำสั่ง)</td></tr>
+            <tr><td>2</td><td>แปลง ER เป็น schema</td><td><code>prisma/schema.prisma</code></td></tr>
+            <tr><td>3</td><td>สร้างฐานข้อมูล</td><td>(คำสั่ง)</td></tr>
+            <tr><td>4</td><td>เขียน API ทั้งหมด</td><td><code>src/app.js</code></td></tr>
+            <tr><td>5</td><td>รันและทดสอบ API ด้วย curl</td><td>(คำสั่ง)</td></tr>
+            <tr><td>6</td><td>ทำหน้าเว็บ</td><td><code>public/index.html</code></td></tr>
+            <tr><td>7</td><td>ถ้าโจทย์ให้ HTML/CSS มา: เอามาใช้แทน</td><td><code>public/…</code></td></tr>
+            <tr><td>8</td><td>ถ้าหัวข้อไม่ใช่หนังสือ: เปลี่ยนชื่อ</td><td>(ทุกไฟล์)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="warn"><b>ถ้าเวลาเหลือน้อย</b> ทำให้ครบถึงข้อ 5 ก่อน (API ทำงานถูก) แล้วค่อยทำหน้าเว็บ เพราะ API ที่ถูกแต่หน้าเว็บเรียบ ได้คะแนนมากกว่าหน้าเว็บสวยแต่ API พัง</div>
+      <h3>ก่อนลงมือ ตอบ 3 คำถามจากโจทย์</h3>
+      <ol>
+        <li>มีกี่ตาราง (กล่องใน ER) และชื่ออะไร</li>
+        <li>ตารางไหนเป็น "แม่" (ฝั่ง 1) ตารางไหนเป็น "ลูก" (ฝั่งหลายรายการ มี FK)</li>
+        <li>ตารางไหนมีรูป (ฟิลด์ที่ชื่อลงท้าย <code>Url</code> หรือ <code>image</code>)</li>
+      </ol>
+      <p>ตัวอย่างนี้: 2 ตาราง (Book, Review) · Book เป็นแม่ Review เป็นลูก (มี <code>bookId</code>) · Book มีรูป (<code>coverUrl</code>)</p>
+    </section>
+
+    <section id="xm1" data-toc="ติดตั้ง" data-n="1">
+      <h2>ติดตั้ง</h2>
+      <div class="qstep">
+        <div class="do"><span class="lab">ทำ</span> วางทั้งก้อนใน <b>PowerShell หรือ cmd</b> (อย่างใดอย่างหนึ่ง) แล้วกด Enter:
+          <script type="text/plain" data-file="PowerShell หรือ cmd" data-nowrite>
+mkdir my-exam
+cd my-exam
+mkdir src, public, prisma
+npm init -y
+npm pkg set type=module
+npm pkg set scripts.dev="node --watch src/app.js"
+npm i express@4 multer@1.4.5-lts.1 @prisma/client@6
+npm i -D prisma@6
+          </script>
+        </div>
+        <div class="see"><span class="lab">ต้องเห็น</span>ในโฟลเดอร์ <code>my-exam</code> มี <code>package.json</code> และ <code>node_modules</code> (คำเตือนสีเหลือง <code>npm warn</code> ไม่เป็นไร)</div>
+        <div class="fail"><span class="lab">ไม่ใช่?</span>ถ้า PowerShell ขึ้นสีแดงว่า <code>running scripts is disabled</code> ให้เปิด <b>cmd</b> แทน (กด Windows พิมพ์ <code>cmd</code> กด Enter) แล้วรันคำสั่งชุดเดิม จะไม่ติดปัญหานี้</div>
+      </div>
+    </section>
+
+    <section id="xm2" data-toc="แปลง ER เป็น schema" data-n="2">
+      <h2>แปลง ER เป็น <code>prisma/schema.prisma</code></h2>
+      <p>อ่านแต่ละกล่องใน ER แล้วแปลงตามตาราง</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>ใน ER</th><th>เขียนใน schema</th></tr></thead>
+          <tbody>
+            <tr><td>กล่อง Entity (เช่น Book)</td><td><code>model Book { ... }</code></td></tr>
+            <tr><td><code>id: Int (PK)</code></td><td><code>id Int @id @default(autoincrement())</code></td></tr>
+            <tr><td><code>String</code> / <code>Int</code> / <code>Float</code> / <code>DateTime</code></td><td>ชื่อและชนิดตามที่เขียนใน ER เป๊ะ ๆ</td></tr>
+            <tr><td><code>String?</code> หรือ Nullable</td><td>ใส่ <code>?</code> ต่อท้ายชนิด</td></tr>
+            <tr><td><code>@default(now())</code></td><td>ใส่ตามนั้นเลย</td></tr>
+            <tr><td>เส้น 1 to Many (Book → Review)</td><td>ฝั่ง Book: <code>reviews Review[]</code><br>ฝั่ง Review: <code>bookId Int</code> และ <code>book Book @relation(...)</code> คู่กันเสมอ</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="qstep">
+        <div class="do"><span class="lab">ทำ</span> สร้างไฟล์ <code>prisma/schema.prisma</code> แล้ววาง:
+          <script type="text/plain" data-file="prisma/schema.prisma" data-nowrite>
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Book {
+  id          Int      @id @default(autoincrement())
+  title       String
+  author      String
+  publishedAt DateTime @default(now())
+  coverUrl    String?
+  reviews     Review[]
+}
+
+model Review {
+  id      Int    @id @default(autoincrement())
+  rating  Int
+  content String
+  bookId  Int
+  book    Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+}
+          </script>
+        </div>
+        <div class="fail"><span class="lab">ระวัง</span>ใช้ชื่อฟิลด์ตามโจทย์เป๊ะ ๆ (ในรูปเป็น <code>content</code> ไม่ใช่ <code>comment</code>) ผู้ตรวจจะทดสอบด้วยชื่อในโจทย์</div>
+      </div>
+    </section>
+
+    <section id="xm3" data-toc="สร้างฐานข้อมูล" data-n="3">
+      <h2>สร้างฐานข้อมูล</h2>
+      <div class="qstep">
+        <div class="do"><span class="lab">ทำ</span>
+          <script type="text/plain" data-file="PowerShell หรือ cmd" data-nowrite>
+npx prisma db push
+          </script>
+        </div>
+        <div class="see"><span class="lab">ต้องเห็น 2 อย่าง</span><code>Your database is now in sync</code> และ <code>Generated Prisma Client</code></div>
+        <div class="fail"><span class="lab">ไม่ใช่?</span>ถ้าไม่เห็นอย่างที่สอง ให้รัน <code>npx prisma generate</code> (ถ้าข้าม จะขึ้น <code>@prisma/client did not initialize yet</code> ตอนรันเซิร์ฟเวอร์) ทุกครั้งที่แก้ schema ต้องรันข้อนี้ใหม่ โดยหยุดเซิร์ฟเวอร์ก่อน (Ctrl+C)</div>
+      </div>
+    </section>
+
+    <section id="xm4" data-toc="เขียน API (app.js)" data-n="4">
+      <h2>เขียน API: <code>src/app.js</code> ไฟล์เดียวจบ</h2>
+      <p>มี CRUD ของ Book (พร้อมอัปโหลดรูป), เพิ่มรีวิว, และดึงหนังสือพร้อมรีวิวซ้อนมาด้วย</p>
+      <div class="qstep">
+        <div class="do"><span class="lab">ทำ</span> สร้างไฟล์ <code>src/app.js</code> แล้ววาง:
+          <script type="text/plain" data-file="src/app.js" data-nowrite>
+import express from 'express';
+import multer from 'multer';
+import fs from 'fs';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+const upload = multer({ dest: 'uploads/' }); // เก็บไฟล์ใน uploads/ ตั้งชื่อสุ่มให้เอง
+
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));              // หน้าเว็บ: public/index.html -> http://localhost:3000
+app.use('/uploads', express.static('uploads')); // รูป: /uploads/ชื่อไฟล์
+
+// ครอบทุก route: error ใดๆ ตอบ JSON (404 ถ้าไม่พบข้อมูล) และลบไฟล์ที่เพิ่งอัปโหลดทิ้ง
+const w = (fn) => (req, res) =>
+  fn(req, res).catch((e) => {
+    if (req.file) fs.rmSync(req.file.path, { force: true });
+    const notFound = e.code === 'P2025' || e.code === 'P2003';
+    res.status(notFound ? 404 : 400).json({ message: notFound ? 'ไม่พบข้อมูล' : e.message });
+  });
+
+const removeFile = (url) => url && fs.rmSync('uploads/' + url.split('/').pop(), { force: true });
+const include = { reviews: true }; // ดึงหนังสือพร้อมรีวิวซ้อนมาด้วย
+
+// ---------- Book: CRUD ----------
+app.get('/api/books', w(async (req, res) => {
+  res.json(await prisma.book.findMany({ include, orderBy: { id: 'desc' } }));
+}));
+
+app.get('/api/books/:id', w(async (req, res) => {
+  res.json(await prisma.book.findUniqueOrThrow({ where: { id: +req.params.id }, include }));
+}));
+
+app.post('/api/books', upload.single('image'), w(async (req, res) => {
+  const { title, author } = req.body;
+  if (!title || !author) throw new Error('ต้องมี title และ author');
+  res.status(201).json(await prisma.book.create({
+    data: { title, author, coverUrl: req.file ? '/uploads/' + req.file.filename : null },
+  }));
+}));
+
+app.put('/api/books/:id', upload.single('image'), w(async (req, res) => {
+  const id = +req.params.id;
+  const old = await prisma.book.findUniqueOrThrow({ where: { id } });
+  const { title, author } = req.body;
+  const book = await prisma.book.update({
+    where: { id },
+    data: {
+      ...(title && { title }),
+      ...(author && { author }),
+      ...(req.file && { coverUrl: '/uploads/' + req.file.filename }), // ไม่ส่งไฟล์ = คงรูปเดิม
+    },
+  });
+  if (req.file) removeFile(old.coverUrl); // แก้สำเร็จแล้วค่อยลบรูปเก่า
+  res.json(book);
+}));
+
+app.delete('/api/books/:id', w(async (req, res) => {
+  const old = await prisma.book.findUniqueOrThrow({ where: { id: +req.params.id } });
+  await prisma.book.delete({ where: { id: old.id } }); // onDelete: Cascade ลบรีวิวให้เอง
+  removeFile(old.coverUrl);
+  res.status(204).end();
+}));
+
+// ---------- Review: เพิ่มรีวิวให้หนังสือ ----------
+app.post('/api/books/:id/reviews', w(async (req, res) => {
+  const rating = +req.body.rating; // ค่าจากฟอร์มเป็น string ต้องแปลงเป็นตัวเลข
+  const { content } = req.body;
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5 || !content) {
+    throw new Error('rating ต้องเป็นจำนวนเต็ม 1-5 และต้องมี content');
+  }
+  res.status(201).json(await prisma.review.create({ data: { bookId: +req.params.id, rating, content } }));
+}));
+
+app.listen(3000, () => console.log('http://localhost:3000'));
+          </script>
+        </div>
+      </div>
+      <div class="why"><b>จุดที่ต้องจำ 4 อย่าง</b>
+        <ul>
+          <li><code>upload.single('image')</code> ชื่อ <code>image</code> ต้องตรงกับ <code>name="image"</code> ของ input ไฟล์</li>
+          <li><code>+req.body.rating</code> ค่าจากฟอร์มเป็น string เสมอ ต้องแปลงเป็นตัวเลขก่อนเก็บลง <code>Int</code> หรือ <code>Float</code></li>
+          <li><code>include: { reviews: true }</code> ทำให้ข้อมูลลูกซ้อนมากับข้อมูลแม่ (ข้อ "ดึงหนังสือพร้อมรีวิว" ของโจทย์)</li>
+          <li><code>onDelete: Cascade</code> ใน schema ลบแม่แล้วลูกหายตาม</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="xm5" data-toc="รันและทดสอบ API" data-n="5">
+      <h2>รันและทดสอบ API ก่อนทำหน้าเว็บ</h2>
+      <div class="qstep">
+        <h3>รันเซิร์ฟเวอร์ (หน้าต่างที่ 1)</h3>
+        <div class="do"><span class="lab">ทำ</span>
+          <script type="text/plain" data-file="PowerShell หรือ cmd (ปล่อยทิ้งไว้ อย่าปิด)" data-nowrite>
+npm run dev
+          </script>
+        </div>
+        <div class="see"><span class="lab">ต้องเห็น</span><code>http://localhost:3000</code></div>
+        <div class="fail"><span class="lab">ไม่ใช่?</span><code>EADDRINUSE</code> แปลว่ามีโปรแกรมอื่นใช้พอร์ต 3000 อยู่ ให้ปิดตัวนั้นก่อน และต้องรันจากโฟลเดอร์ <code>my-exam</code> เสมอ</div>
+      </div>
+      <div class="qstep">
+        <h3>ทดสอบด้วย curl (หน้าต่างที่ 2)</h3>
+        <div class="do"><span class="lab">ทำ</span> เปิดหน้าต่างใหม่อีกหน้าต่าง คำสั่งด้านล่างใช้ได้ทั้ง PowerShell และ cmd (ใน PowerShell ต้องพิมพ์ <code>curl.exe</code> ไม่ใช่ <code>curl</code> ส่วนในบล็อกนี้พิมพ์ <code>curl.exe</code> ไว้แล้ว ใช้ได้ทั้งสองแบบ):
+          <script type="text/plain" data-file="PowerShell หรือ cmd" data-nowrite>
+curl.exe -X POST http://localhost:3000/api/books -F "title=Clean Code" -F "author=Martin"
+curl.exe -X POST http://localhost:3000/api/books -F "title=Refactoring" -F "author=Fowler" -F "image=@C:\path\to\pic.jpg"
+curl.exe -X POST http://localhost:3000/api/books/1/reviews -d "rating=5" -d "content=good"
+curl.exe http://localhost:3000/api/books
+curl.exe -X PUT http://localhost:3000/api/books/1 -F "title=NewTitle"
+curl.exe -X DELETE http://localhost:3000/api/books/2
+          </script>
+        </div>
+        <div class="see"><span class="lab">ต้องเห็น</span>สร้างได้ <code>201</code> และ <code>GET /api/books</code> มี <code>reviews</code> ซ้อนอยู่ในแต่ละเล่ม ใช้ Postman แทน curl ได้ (Body เลือก form-data เมื่อสร้างหรือแก้หนังสือ)</div>
+      </div>
+    </section>
+
+    <section id="xm6" data-toc="ทำหน้าเว็บ (index.html)" data-n="6">
+      <h2>ทำหน้าเว็บ: <code>public/index.html</code></h2>
+      <p>ไฟล์เดียว มีฟอร์มเพิ่ม รายการ ปุ่มแก้/ลบ รีวิว และฟอร์มรีวิว</p>
+      <div class="qstep">
+        <div class="do"><span class="lab">ทำ</span> สร้างไฟล์ <code>public/index.html</code> แล้ววาง:
+          <script type="text/plain" data-file="public/index.html" data-nowrite>
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <title>หนังสือ</title>
+  <style>
+    body { font-family: sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+    .card { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+    .card img { float: right; width: 80px; }
+  </style>
+</head>
+<body>
+<h1>หนังสือ</h1>
+
+<form id="add">
+  <input name="title" placeholder="ชื่อหนังสือ" required>
+  <input name="author" placeholder="ผู้แต่ง" required>
+  <input name="image" type="file" accept="image/*">
+  <button>เพิ่มหนังสือ</button>
+</form>
+<p id="error" style="color:red"></p>
+
+<div id="list"></div>
+
+<script>
+let books = [];
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => '&#' + c.charCodeAt(0) + ';'); // กัน XSS
+
+// เรียก API: ถ้าไม่ OK ให้โยน error ด้วยข้อความจากเซิร์ฟเวอร์
+async function api(url, options) {
+  const res = await fetch(url, options);
+  const data = res.status === 204 ? null : await res.json();
+  if (!res.ok) throw new Error(data.message);
+  return data;
+}
+
+// ทำคำสั่งแล้วโหลดรายการใหม่ ถ้าพังแสดงข้อความสีแดง
+async function run(fn) {
+  try { await fn(); $('#error').textContent = ''; await load(); }
+  catch (e) { $('#error').textContent = e.message; }
+}
+
+// วาดรายการ: HTML ข้างในคือ "แม่แบบการ์ด" ถ้าโจทย์ให้ HTML มา เอามาวางแทนตรงนี้
+async function load() {
+  books = await api('/api/books');
+  $('#list').innerHTML = books.map((b) => `
+    <div class="card">
+      ${b.coverUrl ? `<img src="${b.coverUrl}" alt="">` : ''}
+      <h3>${esc(b.title)}</h3>
+      <small>${esc(b.author)}</small>
+      <p><button onclick="edit(${b.id})">แก้ชื่อ</button> <button onclick="removeBook(${b.id})">ลบ</button></p>
+      <ul>${b.reviews.map((r) => `<li>${'★'.repeat(r.rating)} ${esc(r.content)}</li>`).join('')}</ul>
+      <form onsubmit="review(event, ${b.id})">
+        <select name="rating"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select>
+        <input name="content" placeholder="รีวิว" required>
+        <button>ส่ง</button>
+      </form>
+    </div>`).join('') || 'ยังไม่มีหนังสือ';
+}
+
+// เพิ่มหนังสือ (ส่งเป็น FormData เพราะมีไฟล์ ห้ามตั้ง Content-Type เอง)
+$('#add').onsubmit = (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  if (!fd.get('image').size) fd.delete('image'); // ไม่เลือกรูป = ไม่ส่งฟิลด์
+  run(async () => { await api('/api/books', { method: 'POST', body: fd }); e.target.reset(); });
+};
+
+function removeBook(id) {
+  run(() => api('/api/books/' + id, { method: 'DELETE' }));
+}
+
+function edit(id) {
+  const title = prompt('ชื่อใหม่', books.find((b) => b.id === id).title);
+  if (!title) return;
+  const fd = new FormData();
+  fd.append('title', title);
+  run(() => api('/api/books/' + id, { method: 'PUT', body: fd }));
+}
+
+function review(e, bookId) {
+  e.preventDefault();
+  const body = JSON.stringify(Object.fromEntries(new FormData(e.target))); // ส่ง JSON ต้องตั้ง Content-Type เอง
+  run(() => api(`/api/books/${bookId}/reviews`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body }));
+}
+
+load();
+<\/script>
+</body>
+</html>
+          </script>
+        </div>
+        <div class="see"><span class="lab">ต้องเห็น</span>เปิด <code>http://localhost:3000</code> แล้วเพิ่มหนังสือพร้อมรูปได้ ส่งรีวิวแล้วขึ้นใต้ชื่อ กดแก้ชื่อและลบได้ แก้ไฟล์ใน <code>public</code> แล้ว refresh ได้เลย ไม่ต้องรีสตาร์ทเซิร์ฟเวอร์</div>
+      </div>
+    </section>
+
+    <section id="xm7" data-toc="โจทย์ให้ HTML/CSS มา" data-n="7">
+      <h2>ถ้าโจทย์ให้ HTML/CSS มาด้วย</h2>
+      <p>หลักคิดเดียว: <b>เอา HTML ของโจทย์มาเป็นแม่แบบการ์ด</b> วางลงในฟังก์ชัน <code>load()</code> แล้วเปลี่ยนข้อความตายตัวเป็น <code>${...}</code></p>
+      <div class="qstep">
+        <div class="do"><span class="lab">ทำ</span>
+          <ol>
+            <li>คัดลอกไฟล์ CSS ของโจทย์ไปไว้ที่ <code>public/css/style.css</code> และรูปประกอบไว้ที่ <code>public/img/</code></li>
+            <li>เอา <code>&lt;head&gt;</code>, header/เมนู, footer ของโจทย์มาใส่ใน <code>index.html</code> แทนบล็อก <code>&lt;style&gt;...&lt;/style&gt;</code> ของผม โดยใส่ <code>&lt;link rel="stylesheet" href="/css/style.css"&gt;</code> (path ขึ้นต้นด้วย <code>/</code> เสมอ)</li>
+            <li>ลบการ์ดตายตัวทั้งหมด เหลือกล่องว่าง <code>&lt;div id="list"&gt;&lt;/div&gt;</code></li>
+            <li>เอา <b>การ์ดใบเดียว</b> ของโจทย์ไปแทนแม่แบบใน <code>load()</code> ตามตัวอย่างด้านล่าง (<code>class</code> เดิมต้องอยู่ครบ CSS จึงทำงาน)</li>
+          </ol>
+        </div>
+      </div>
+      <p>การ์ดของโจทย์ (ก่อนแก้):</p>
+      <script type="text/plain" data-file="HTML ของโจทย์" data-nowrite>
+<article class="card">
+  <img class="thumb" src="img/cc.jpg">
+  <h3>Clean Code</h3>
+  <small>Robert Martin</small>
+</article>
+      </script>
+      <p>ใน <code>load()</code> (หลังแก้):</p>
+      <script type="text/plain" data-file="public/index.html (ใน load)" data-nowrite>
+$('#list').innerHTML = books.map((b) => `
+  <article class="card">
+    ${b.coverUrl ? `<img class="thumb" src="${b.coverUrl}" alt="">` : ''}
+    <h3>${esc(b.title)}</h3>
+    <small>${esc(b.author)}</small>
+  </article>`).join('') || 'ยังไม่มีหนังสือ';
+      </script>
+      <div class="note">อยากให้มีปุ่มลบและแก้ ให้เติม <code>&lt;button onclick="removeBook(${b.id})"&gt;ลบ&lt;/button&gt;</code> และ <code>&lt;button onclick="edit(${b.id})"&gt;แก้ชื่อ&lt;/button&gt;</code> ไว้ในการ์ด ถ้าโจทย์มีหลายหน้า ย้าย <code>esc</code>, <code>api</code>, <code>run</code> ไปไว้ใน <code>public/common.js</code> แล้วใส่ <code>&lt;script src="/common.js"&gt;&lt;/script&gt;</code> ในทุกหน้า</div>
+    </section>
+
+    <section id="xm8" data-toc="เปลี่ยนหัวข้อ (ไม่ใช่หนังสือ)" data-n="8">
+      <h2>ถ้าโจทย์ไม่ใช่หนังสือ: เปลี่ยนชื่อที่ไหนบ้าง</h2>
+      <p>ใช้ Find &amp; Replace ใน editor (<code>Book</code>→ชื่อใหม่, <code>book</code>→ชื่อใหม่ตัวเล็ก) แล้วไล่ดูตาราง</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>ไฟล์</th><th>สิ่งที่ต้องแก้</th></tr></thead>
+          <tbody>
+            <tr><td><code>schema.prisma</code></td><td>ชื่อ model ชื่อฟิลด์ ความสัมพันธ์ ตาม ER แล้วรัน <code>npx prisma db push</code></td></tr>
+            <tr><td><code>app.js</code></td><td><code>prisma.book</code>, <code>prisma.review</code>, path <code>/api/books</code>, ฟิลด์ใน <code>req.body</code> และใน <code>data: {...}</code>, ชื่อ <code>coverUrl</code></td></tr>
+            <tr><td><code>app.js</code> (ชนิดข้อมูล)</td><td>ฟิลด์ <code>Int</code> และ <code>Float</code> ใช้ <code>+x</code> แปลงก่อนเก็บ ส่วน <code>String</code> ไม่ต้องแปลง</td></tr>
+            <tr><td><code>index.html</code></td><td>path <code>/api/books</code>, ชื่อฟิลด์ที่แสดง (<code>b.title</code>, <code>b.author</code>), <code>name=""</code> ของ input ให้ตรงกับ <code>req.body</code></td></tr>
+            <tr><td>ถ้าไม่มีตารางลูก (ไม่มี Review)</td><td>ลบ <code>reviews</code> ออกจาก schema, <code>include</code>, route รีวิว และส่วนรีวิวในแม่แบบการ์ด จะเหลือตารางเดียว</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="warn">ชื่อต้องตรงกันทุกชั้น: ER → schema → <code>req.body</code> → <code>name=""</code> ของ input → ตอนแสดงผล พลาดชั้นใดชั้นหนึ่ง ข้อมูลจะหายเงียบ ๆ</div>
+    </section>
+
+    <section id="xm9" data-toc="ปัญหาที่เจอบ่อย (ห้องสอบ)">
+      <h2>ปัญหาที่เจอบ่อย</h2>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>อาการ</th><th>แก้</th></tr></thead>
+          <tbody>
+            <tr><td><code>@prisma/client did not initialize yet</code></td><td>ยังไม่ได้ generate รัน <code>npx prisma generate</code></td></tr>
+            <tr><td>เปิดเว็บแล้ว <code>Cannot GET /</code></td><td>ไม่มี <code>public/index.html</code> หรือรัน <code>npm run dev</code> ผิดโฟลเดอร์ (ต้องอยู่ใน <code>my-exam</code>)</td></tr>
+            <tr><td><code>PrismaClientValidationError</code></td><td>ชื่อ model หรือฟิลด์ใน <code>app.js</code> ไม่ตรง schema หรือแก้ schema แล้วลืม <code>db push</code></td></tr>
+            <tr><td><code>req.body</code> ว่างตอนส่งไฟล์</td><td>ตั้ง <code>Content-Type</code> เองตอนส่ง FormData ให้ลบบรรทัดนั้นออก</td></tr>
+            <tr><td>อัปโหลดแล้วไม่มีรูป (<code>req.file</code> เป็น undefined)</td><td><code>name="image"</code> ไม่ตรงกับ <code>upload.single('image')</code></td></tr>
+            <tr><td>รูปไม่ขึ้นในหน้า</td><td><code>coverUrl</code> ต้องขึ้นต้น <code>/uploads/</code> และมี <code>app.use('/uploads', ...)</code></td></tr>
+            <tr><td>ส่งรีวิวแล้ว 400</td><td>ฟอร์มส่งชื่อฟิลด์ไม่ตรง (<code>comment</code> กับ <code>content</code>) หรือ rating ไม่ใช่ 1-5</td></tr>
+            <tr><td><code>EPERM</code> ตอน <code>prisma generate</code></td><td>เซิร์ฟเวอร์ที่รันอยู่ล็อกไฟล์ กด Ctrl+C หยุดก่อนแล้วรันใหม่</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>ถ้าโจทย์ต้องการมากกว่านี้</h3>
+      <ul>
+        <li>จำกัดชนิดไฟล์หรือขนาดรูป: หัวข้อ <a href="#s3">B3</a> (<code>fileFilter</code> และ <code>limits</code> ของ multer)</li>
+        <li>Swagger / OpenAPI: หัวข้อ <a href="#s13">B13</a></li>
+        <li>ต้องใช้ Next.js: <a href="#quick">ส่วน A</a> ข้อ 8-11</li>
+      </ul>
+    </section>
+    </div>
+
 
     <div class="part" id="part-quick">
     <!-- ===== A: ทางด่วน ===== -->
@@ -3211,7 +3672,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(spec));   // spec = YAML.parse
     <div class="band" id="adapt" data-toc="F. นำ HTML/CSS ของโจทย์มาใช้">
       <h2>F. นำ HTML/CSS ที่โจทย์ให้มาใช้</h2>
       <p>กรณีโจทย์ให้ไฟล์ HTML และ CSS มาแล้ว และไม่บังคับโครงสร้าง ใช้ Express หรือ NestJS ทำหลังบ้าน ส่วนนี้สอนทุกวิธีที่ใช้ได้ พร้อมโค้ดที่ผมรันทดสอบแล้ว (Express 4, NestJS 12, Node 24)</p>
-      <div class="note"><b>ทำส่วน A เสร็จแล้วใช่ไหม?</b> ข้ามไปที่ <a href="#f0">F3</a> ได้เลย ใช้ Express เดิมเสิร์ฟ HTML/CSS ของอาจารย์ได้ ไม่ต้องลง Next.js เพิ่ม</div>
+      <div class="note"><b>ทำส่วน A เสร็จแล้วใช่ไหม?</b> ข้ามไปที่ <a href="#f0">F3</a> ได้เลย ใช้ Express เดิมเสิร์ฟ HTML/CSS ของอาจารย์ได้ ไม่ต้องลง Next.js เพิ่ม ถ้ากำลังเตรียมสอบ ให้ดูส่วน <a href="#exam">ห้องสอบ</a> แทน (สั้นกว่า)</div>
     </div>
 
     <!-- ===== F1 ===== -->
@@ -4322,13 +4783,20 @@ function buildToc(part) {
 }
 
 function showPart(part) {
+  document.body.dataset.part = part.id; // ให้ CSS ซ่อน/แสดงแถบ "กำลังเตรียมสอบ?" ตามส่วนที่เปิดอยู่
   parts.forEach((p) => p.classList.toggle('active', p === part));
   navLinks.forEach((a) => {
     const t = document.querySelector(a.getAttribute('href'));
     if (t && t.closest('.part') === part) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
   buildToc(part);
+  more?.toggleAttribute('data-on', !!more.querySelector('a[aria-current]')); // ถ้าอยู่ในบทเรียนเสริม ให้ปุ่ม "บทเรียนเสริม" ขึ้นสีว่าอยู่ตรงนี้
 }
+
+// เมนู "บทเรียนเสริม": ปิดเองเมื่อเลือกลิงก์หรือคลิกที่อื่น
+const more = document.querySelector('.sitenav details.more');
+more?.addEventListener('click', (e) => { if (e.target.closest('a')) more.open = false; });
+document.addEventListener('click', (e) => { if (more && !more.contains(e.target)) more.open = false; });
 
 function route() {
   const id = decodeURIComponent(location.hash.slice(1));
